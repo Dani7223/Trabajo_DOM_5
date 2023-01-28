@@ -1,6 +1,11 @@
 // Variables globales
 let area;
 let cube;
+let cubes = [];
+let i = 0;
+
+let iz = 60;
+
 // Área para el proyecto
 let main = document.getElementsByTagName("main")[0];
 area = document.createElement("div");
@@ -8,7 +13,20 @@ area.classList.add("container");
 area.style.border = "2px solid red";
 area.style.height = "400px";
 area.style.position = "relative";
+area.addEventListener("mousemove", coordenadas)
 main.parentElement.insertBefore(area, main);
+
+
+//Creamos el area de los borrados
+area2 = document.createElement("div");
+area2.classList.add("container");
+area2.style.border = "2px solid red";
+area2.style.height = "100px";
+area2.style.position = "relative";
+area2.style.padding = "10px"
+main.parentElement.insertBefore(area2, main);
+
+
 
 // Pieza que queremos mover
 cube = document.createElement("div");
@@ -62,12 +80,10 @@ function makeBigger(cube) {
     let area1 = area.offsetHeight;
     let top = cube.offsetTop;
 
-    let area2 = area.offsetWidth;
 
 
-    if ((area1 == top) || (height == area2)) {
+    if (!(top > (area1 - height))) {
 
-    } else {
         width = width + 5;
         height = height + 5;
 
@@ -77,6 +93,7 @@ function makeBigger(cube) {
     }
 
 }
+
 
 //Función que hace más pequeño el cubo hasta llegar al mínimo
 function makeSmaller(cube) {
@@ -100,32 +117,6 @@ function makeSmaller(cube) {
 }
 
 
-function drawCube(x,y) {
-
-    // Pieza que queremos mover
-    cube = document.createElement("div");
-    cube.style.background = "yellow";
-    cube.style.width = "50px";
-    cube.style.height = "50px";
-    cube.style.position = "absolute";
-    cube.style.top = x+"px";
-    cube.style.left = y+"px";
-    area.appendChild(cube);
-
-}
-
-function coordenadas(event) {
-    x = event.clientX;
-    y = event.clientY;
-
-    document.getElementById("x").value = x;
-    document.getElementById("y").value = y;
-
-
-}
-
-document.getElementById("x").value = x;
-document.getElementById("y").value = y;
 
 let acctions = [];
 
@@ -143,6 +134,8 @@ function addAction(action) {
     span.style.float = "left";
     span.style.margin = "2px";
     span.style.cursor = "pointer";
+    span.classList.add("span");
+
     span.addEventListener("mouseenter", function () {
         this.style.backgroundColor = "red";
         this.style.color = "white";
@@ -151,6 +144,15 @@ function addAction(action) {
         this.style.backgroundColor = "white";
         this.style.color = "black";
     })
+
+    span.addEventListener("click", function () {
+        let index = acctions.findIndex((action) => {
+            return action.span === this;
+        })
+        acctions.splice(index, 1);
+        this.remove();
+    })
+
     area.appendChild(span);
 }
 
@@ -221,10 +223,74 @@ function executeAcctions() {
     }
 }
 
-span.addEventListener("click", function () {
-    let index = acctions.findIndex((action) => {
-        return action.span === this;
-    })
-    acctions.splice(index, 1);
-    this.remove();
-})
+
+
+let contain = document.getElementsByClassName("container");
+
+area.addEventListener("click", function (elem) {
+
+    if (elem.target.classList == "container") {
+        let cube1 = document.createElement("div");
+
+        i++;
+
+        cubes.push({
+            instance: i,
+            cube: cube1,
+        });
+
+        cube1.textContent = i;
+        cube1.classList.add("cube2");
+        cube1.style.background = "red";
+        cube1.style.width = "50px";
+        cube1.style.height = "50px";
+        cube1.style.position = "absolute";
+        cube1.style.left = x + "px";
+        cube1.style.top = y + "px";
+
+        cube1.addEventListener("click", function () {
+            let index = cubes.findIndex((cu) => {
+                return cu.cube === this;
+            });
+
+            cubes.splice(index, 1);
+            this.remove();
+
+
+            cube1.style.top = "40px";
+            cube1.style.left = iz + "px";
+
+            iz = iz + 80;
+
+            if(iz > area2.offsetWidth - cube1.offsetWidth){
+                alert( "hola");
+            }else{
+                area2.appendChild(cube1);
+            }
+
+            
+
+        });
+
+        area.appendChild(cube1);
+    }
+
+
+});
+
+
+
+
+
+function coordenadas(event) {
+    x = event.clientX;
+    y = event.clientY;
+
+    document.getElementById("x").value = x;
+    document.getElementById("y").value = y;
+
+
+}
+
+document.getElementById("x").value = x;
+document.getElementById("y").value = y;
