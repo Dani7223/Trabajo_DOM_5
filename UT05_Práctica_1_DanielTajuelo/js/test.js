@@ -89,9 +89,11 @@ function makeBigger(cube) {
     //Controlamos que el cubo no se salga del area
     if (!(top > (area1 - height))) {
 
+        //Incrementamos la altura y la anchura
         width = width + 5;
         height = height + 5;
 
+        //Se lo aplicamos al cubo
         cube.style.width = width + "px";
         cube.style.height = height + "px";
 
@@ -113,9 +115,11 @@ function makeSmaller(cube) {
         let height = cube.offsetHeight;
 
 
+        //Decrementamos la altura y la anchura
         width = width - 5;
         height = height - 5;
 
+        //Se lo aplicamos al cubo
         cube.style.width = width + "px";
         cube.style.height = height + "px";
     }
